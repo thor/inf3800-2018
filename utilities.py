@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import heapq
-
 def apply(function, iterable):
     """
     Applies the given function to each item in the given iterable.
