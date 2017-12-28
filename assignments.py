@@ -16,6 +16,7 @@ def assignment_a():
     tokenizer = BrainDeadTokenizer()
 
     # Dump postings for a dummy two-document corpus.
+    print("INDEXING...")
     corpus = InMemoryCorpus()
     corpus.add_document(Document(0, {"body": "this is a Test"}))
     corpus.add_document(Document(1, {"body": "test TEST prØve"}))
@@ -31,7 +32,9 @@ def assignment_a():
     print(index)
 
     # Again, for a slightly bigger corpus.
+    print("LOADING...")
     corpus = InMemoryCorpus("data/mesh.txt")
+    print("INDEXING...")
     index = InMemoryInvertedIndex(corpus, ["body"], normalizer, tokenizer)
     for (term, expected_length) in [("hydrogen", 8),
                                     ("hydrocephalus", 2)]:
@@ -41,6 +44,7 @@ def assignment_a():
         assert len(list(index.get_postings_iterator(term))) == expected_length
 
     # Test that we merge posting lists correctly. Note implicit test for case- and whitespace robustness.
+    print("MERGING...")
     merger = PostingsMerger()
     and_query = ("HIV  pROtein", "AND", [11316, 11319, 11320, 11321])
     or_query = ("water Toxic", "OR", [3078, 8138, 8635, 9379, 14472, 18572, 23234, 23985] + [i for i in range(25265, 25282)])

@@ -59,6 +59,7 @@ Expected output:
 ```
 >python3 assignments.py a
 *** ASSIGNMENT A ***
+INDEXING...
 prøve
 {'document_id': 1, 'term_frequency': 1}
 wtf
@@ -66,6 +67,8 @@ test
 {'document_id': 0, 'term_frequency': 1}
 {'document_id': 1, 'term_frequency': 2}
 {'this': [{'document_id': 0, 'term_frequency': 1}], 'is': [{'document_id': 0, 'term_frequency': 1}], 'a': [{'document_id': 0, 'term_frequency': 1}], 'test': [{'document_id': 0, 'term_frequency': 1}, {'document_id': 1, 'term_frequency': 2}], 'prøve': [{'document_id': 1, 'term_frequency': 1}]}
+LOADING...
+INDEXING...
 hydrogen
 {'document_id': 11634, 'term_frequency': 1}
 {'document_id': 11635, 'term_frequency': 1}
@@ -78,6 +81,7 @@ hydrogen
 hydrocephalus
 {'document_id': 11622, 'term_frequency': 1}
 {'document_id': 11623, 'term_frequency': 1}
+MERGING...
 HIV AND pROtein
 {'document_id': 11316, 'fields': {'body': 'hiv core protein p24', 'meta': '20'}}
 {'document_id': 11319, 'fields': {'body': 'hiv envelope protein gp120', 'meta': '26'}}
