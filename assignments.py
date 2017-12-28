@@ -21,7 +21,7 @@ def assignment_a():
     corpus.add_document(Document(1, {"body": "test TEST prØve"}))
     index = InMemoryInvertedIndex(corpus, ["body"], normalizer, tokenizer)
     for (term, expected) in zip(index.get_terms("PRøvE wtf tesT"), [[(1, 1)], [], [(0, 1), (1, 2)]]):
-        print("***", term)
+        print(term)
         assert term in ["prøve", "wtf", "test"]
         postings = list(index.get_postings_iterator(term))
         for posting in postings:
@@ -35,7 +35,7 @@ def assignment_a():
     index = InMemoryInvertedIndex(corpus, ["body"], normalizer, tokenizer)
     for (term, expected_length) in [("hydrogen", 8),
                                     ("hydrocephalus", 2)]:
-        print("***", term)
+        print(term)
         for posting in index.get_postings_iterator(term):
             print(posting)
         assert len(list(index.get_postings_iterator(term))) == expected_length
