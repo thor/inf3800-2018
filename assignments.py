@@ -3,11 +3,12 @@
 
 from normalization import BrainDeadNormalizer
 from tokenization import BrainDeadTokenizer
-from corpus import Document, InMemoryCorpus
+from corpus import InMemoryDocument, InMemoryCorpus
 from invertedindex import InMemoryInvertedIndex
 from traversal import PostingsMerger
 import re
 import sys
+
 
 def assignment_a():
 
@@ -18,8 +19,8 @@ def assignment_a():
     # Dump postings for a dummy two-document corpus.
     print("INDEXING...")
     corpus = InMemoryCorpus()
-    corpus.add_document(Document(0, {"body": "this is a Test"}))
-    corpus.add_document(Document(1, {"body": "test TEST prØve"}))
+    corpus.add_document(InMemoryDocument(0, {"body": "this is a Test"}))
+    corpus.add_document(InMemoryDocument(1, {"body": "test TEST prØve"}))
     index = InMemoryInvertedIndex(corpus, ["body"], normalizer, tokenizer)
     for (term, expected) in zip(index.get_terms("PRøvE wtf tesT"), [[(1, 1)], [], [(0, 1), (1, 2)]]):
         print(term)
@@ -47,29 +48,37 @@ def assignment_a():
     print("MERGING...")
     merger = PostingsMerger()
     and_query = ("HIV  pROtein", "AND", [11316, 11319, 11320, 11321])
-    or_query = ("water Toxic", "OR", [3078, 8138, 8635, 9379, 14472, 18572, 23234, 23985] + [i for i in range(25265, 25282)])
+    or_query = ("water Toxic", "OR", [3078, 8138, 8635, 9379, 14472, 18572, 23234, 23985] +
+                                     [i for i in range(25265, 25282)])
     for (query, operator, expected_document_ids) in [and_query, or_query]:
         print(re.sub("\W+", " " + operator + " ", query))
-        terms = index.get_terms(query)
+        terms = list(index.get_terms(query))
         assert len(terms) == 2
-        postings = [corpus.get_document(posting.document_id) for posting in {"AND": merger.intersection, "OR": merger.union}[operator](index.get_postings_iterator(terms[0]), index.get_postings_iterator(terms[1]))]
-        print(*postings, sep = "\n")
-        assert len(postings) == len(expected_document_ids)
-        assert [posting.document_id for posting in postings] == expected_document_ids
+        postings = [index.get_postings_iterator(terms[i]) for i in range(len(terms))]
+        merged = {"AND": merger.intersection, "OR": merger.union}[operator](postings[0], postings[1])
+        documents = [corpus.get_document(posting.document_id) for posting in merged]
+        print(*documents, sep="\n")
+        assert len(documents) == len(expected_document_ids)
+        assert [d.get_document_id() for d in documents] == expected_document_ids
+
 
 def assignment_b():
     pass
 
+
 def assignment_c():
     pass
+
 
 def assignment_d():
     pass
 
+
 def assignment_e():
     pass
 
-if __name__ == "__main__":
+
+def main():
     tests = {"a": assignment_a,
              "b": assignment_b,
              "c": assignment_c,
@@ -82,3 +91,7 @@ if __name__ == "__main__":
     print("*************************")
     print("*** ALL TESTS PASSED! ***")
     print("*************************")
+
+
+if __name__ == "__main__":
+    main()

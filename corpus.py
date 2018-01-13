@@ -1,23 +1,78 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-class Document:
-    """
-    A very simple and straightforward implementation of a document.
-    Here, a document is a simple collection of typed fields.
+from abc import ABC, abstractmethod
+import collections.abc
+from typing import Dict, Any
 
+
+class Document(ABC):
+    """
+    Abstract base class for a document. A document is a simple collection of
+    named, typed fields.
+    """
+
+    @abstractmethod
+    def get_document_id(self) -> int:
+        """
+        Returns the document's unique identifier.
+        """
+        pass
+
+    @abstractmethod
+    def get_field(self, field_name: str, default: Any) -> Any:
+        """
+        Returns the value of the named field in the document. If the document
+        doesn't contain the named field, the provided default field value is
+        returned instead.
+        """
+        pass
+
+
+class InMemoryDocument(Document):
+    """
+    A very simple and straightforward in-memory implementation of a document.
     Note that what we index are normalized versions of the raw fields. We keep
     the raw fields here in order to preserve the original presentation.
     """
 
-    def __init__(self, document_id, fields):
-        self.document_id = document_id
-        self.fields = fields
+    def __init__(self, document_id: int, fields: Dict[str, Any]):
+        self._document_id = document_id
+        self._fields = fields
 
     def __repr__(self):
-        return str({"document_id": self.document_id, "fields" : self.fields})
+        return str({"document_id": self._document_id, "fields": self._fields})
 
-class InMemoryCorpus:
+    def get_document_id(self) -> int:
+        return self._document_id
+
+    def get_field(self, field_name: str, default: Any) -> Any:
+        return self._fields.get(field_name, default)
+
+
+class Corpus(collections.abc.Iterable):
+    """
+    Abstract base class representing a corpus we can index and search over,
+    i.e., a collection of documents.
+    """
+
+    @abstractmethod
+    def size(self) -> int:
+        """
+        Returns the size of the corpus, i.e., the number of documents in the
+        document collection.
+        """
+        pass
+
+    @abstractmethod
+    def get_document(self, document_id: int) -> Document:
+        """
+        Returns the document associated with the given document identifier.
+        """
+        pass
+
+
+class InMemoryCorpus(Corpus):
     """
     An in-memory implementation of a document store, suitable only for small
     document collections.
@@ -25,7 +80,7 @@ class InMemoryCorpus:
     Document identifiers are assigned on a first-come first-serve basis.
     """
 
-    def __init__(self, filename = None):
+    def __init__(self, filename=None):
         self._documents = []
         if filename:
             if filename.endswith(".txt"):
@@ -40,25 +95,18 @@ class InMemoryCorpus:
     def __iter__(self):
         return iter(self._documents)
 
-    def size(self):
-        """
-        Returns the size of the corpus, i.e., the number of documents in the
-        document collection.
-        """
+    def size(self) -> int:
         return len(self._documents)
 
-    def get_document(self, document_id):
-        """
-        Returns the document associated with the given document identifier.
-        """
-        assert document_id >= 0 and document_id < len(self._documents)
+    def get_document(self, document_id: int) -> Document:
+        assert 0 <= document_id < len(self._documents)
         return self._documents[document_id]
 
-    def add_document(self, document):
+    def add_document(self, document: Document) -> None:
         """
         Adds the given document to the corpus. Facilitates testing.
         """
-        assert document.document_id == len(self._documents)
+        assert document.get_document_id() == len(self._documents)
         self._documents.append(document)
 
     def _load_text(self, filename):
@@ -71,13 +119,13 @@ class InMemoryCorpus:
         document_id = 0
         with open(filename, "r") as f:
             for line in f:
-                anonymous_fields = line.strip().split("\t") # One document per line, tab-separated fields.
+                anonymous_fields = line.strip().split("\t")
                 if len(anonymous_fields) == 1 and not anonymous_fields[0]:
                     continue
                 named_fields = {"body": anonymous_fields[0]}
                 if len(anonymous_fields) >= 2:
                     named_fields["meta"] = anonymous_fields[1]
-                self.add_document(Document(document_id, named_fields))
+                self.add_document(InMemoryDocument(document_id, named_fields))
                 document_id += 1
 
     def _load_xml(self, filename):
@@ -87,16 +135,18 @@ class InMemoryCorpus:
         named "body".
         """
         from xml.dom.minidom import parse
+
         def __get_text(nodes):
             data = []
             for node in nodes:
                 if node.nodeType == node.TEXT_NODE:
                     data.append(node.data)
             return " ".join(data)
+
         dom = parse(filename)
         document_id = 0
         for body in [__get_text(n.childNodes) for n in dom.getElementsByTagName("doc")]:
-            self.add_document(Document(document_id, {"body": body}))
+            self.add_document(InMemoryDocument(document_id, {"body": body}))
             document_id += 1
 
     def _load_json(self, filename):
@@ -111,16 +161,24 @@ class InMemoryCorpus:
                 line = line.strip()
                 if line.startswith("{"):
                     named_fields = loads(line)
-                    self.add_document(Document(document_id, named_fields))
+                    self.add_document(InMemoryDocument(document_id, named_fields))
                     document_id += 1
 
-if __name__ == "__main__":
+
+def main():
+    """
+    Example usage. A tiny unit test, in a sense.
+    """
     corpus = InMemoryCorpus("data/mesh.txt")
-    print(*corpus, sep = "\n")
+    print(*corpus, sep="\n")
     print(corpus.size())
     corpus = InMemoryCorpus("data/cran.xml")
-    print(*corpus, sep = "\n")
+    print(*corpus, sep="\n")
     print(corpus.size())
     corpus = InMemoryCorpus("data/docs.json")
-    print(*corpus, sep = "\n")
+    print(*corpus, sep="\n")
     print(corpus.size())
+
+
+if __name__ == "__main__":
+    main()

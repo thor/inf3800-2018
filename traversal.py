@@ -1,12 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from typing import Iterator
+from invertedindex import Posting
+
+
 class PostingsMerger:
+    """
+    Utility class for merging posting lists.
+    """
 
-    def __init__(self):
-        pass
-
-    def intersection(self, p1, p2):
+    @staticmethod
+    def intersection(p1: Iterator[Posting], p2: Iterator[Posting]) -> Iterator[Posting]:
         """
         A generator that yields a simple AND of two posting lists, given
         iterators over these.
@@ -16,7 +21,8 @@ class PostingsMerger:
         """
         raise NotImplementedError
 
-    def union(self, p1, p2):
+    @staticmethod
+    def union(p1: Iterator[Posting], p2: Iterator[Posting]) -> Iterator[Posting]:
         """
         A generator that yields a simple OR of two posting lists, given
         iterators over these.
