@@ -22,9 +22,9 @@ If your code raises no exceptions and passes all the `assert` statements, you sh
     *** ALL TESTS PASSED! ***
     *************************
 
-All your implementations should be reasonably efficient. Please strive to create readable and modular code.
+Please strive to create readable and modular code. At a minimum, your code should pass all PyCharm's quality checks with PyCharm's standard configuration. (PyCharm warns about quality issues in its right-hand scrollbar. Please fix all these before submitting your code through [Devilry](https://devilry.ifi.uio.no/).)
 
-If your code is very slow and you want to measure where the time is spent, you can use the built-in `cProfile` module to do this:
+All your implementations should be reasonably efficient. If your code is very slow and you want to measure where the time is spent, you can use the built-in `cProfile` module to do this:
 
     >python3 –m cProfile assignments.py
 
