@@ -2,7 +2,7 @@
 
 There are five obligatory assignments in INF3800 and INF4800. The assignments are a mix of pen-and-paper exercises and coding exercises. This document and this repository concerns the coding exercises.
 
-The coding assignments assume basic familiarity with the Python language. At least version 3.6 will be assumed. If you are on an older version of Python you’re on your own, and you might have to backport code. You can use whatever development environment you want, but you will probably be more productive and have an easier time if you use a good IDE. We can recommend [PyCharm](https://www.jetbrains.com/pycharm/). You can use another set of tools if you want, but then don't expect help with solving challenges related to setup or tooling.
+The coding assignments assume basic familiarity with the Python language. At least [version 3.6](https://www.python.org/downloads/release/python-364/) will be assumed. If you are on an older version of Python you’re on your own, and you might have to backport code. You can use whatever development environment you want, but you will probably be more productive and have an easier time if you use a good IDE. We can recommend [PyCharm](https://www.jetbrains.com/pycharm/). You can use another set of tools if you want, but then don't expect help with solving challenges related to setup or tooling.
 
 You will be provided with some "precode" or "starter code", i.e., a set of helper classes and functions that you can make use of so that you don't have to start the coding assignments completely from scratch. This precode also sets some structure on how you implement the assignments. Please familiarize yourself with what's available. The precode is commented and has some illustrative usage examples.
 
