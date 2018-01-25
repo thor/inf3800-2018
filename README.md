@@ -40,8 +40,8 @@ The purpose of this assignment is to build a simple in-memory inverted index and
 
 Pen-and-paper exercises:
 
-* 2015, "STEMMING".
-* 2014, "QUERY PROCESSING".
+* [2015, "STEMMING"](exams/eks-2015.pdf).
+* [2014, "QUERY PROCESSING"](exams/eks-2014.pdf).
 
 Implementation notes:
 
