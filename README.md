@@ -8,7 +8,7 @@ The coding assignments assume basic familiarity with the Python language. At lea
 
 You will be provided with some "precode" or "starter code", i.e., a set of helper classes and functions that you can make use of so that you don't have to start the coding assignments completely from scratch. This precode also sets some structure on how you implement the assignments. Please familiarize yourself with what's available. The precode is commented and has some illustrative usage examples.
 
-The precode is in many places annotated with [type hints](https://www.python.org/dev/peps/pep-0484/). This doesn't make Python a statically typed language, but are just hints that are possible to ignore and abuse. They do convey intent and serve as a kind of additional documentation, though, and enable PyCharm and other IDEs to give you better and richer programming support.
+The precode is in many places annotated with [type hints](https://www.python.org/dev/peps/pep-0484/), using the [typing module](https://docs.python.org/3/library/typing.html). These type hints are read by the PyCharm type checker and can be specified for both function signatures and [variables](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#convert-comment). This doesn't make Python a statically typed language, but are just hints that are possible to ignore and abuse. They do convey intent and serve as a kind of additional documentation, though, and enable PyCharm and other IDEs to give you better and richer programming support.
 
 Common for the precode is that `NotImplementedError` is raised in places where you are meant to provide a working implementation. After having provided working implementations, the following should work and run without errors:
 
