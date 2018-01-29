@@ -14,6 +14,12 @@ class Dictionary(collections.abc.Iterable):
     a perfect hash.
     """
 
+    def __len__(self):
+        return self.size()
+
+    def __getitem__(self, term: str) -> int:
+        return self.get_term_id(term)
+
     @abstractmethod
     def size(self) -> int:
         """
@@ -76,9 +82,11 @@ def main():
     vocabulary.add_if_absent("foo")
     vocabulary.add_if_absent("bar")
     vocabulary.add_if_absent("foo")
+    assert len(vocabulary) == 2
     assert vocabulary.size() == 2
     assert vocabulary.get_term_id("foo") == 0
     assert vocabulary.get_term_id("bar") == 1
+    assert vocabulary["bar"] == 1
     assert vocabulary.get_term_id("wtf") == -1
     print(vocabulary)
 

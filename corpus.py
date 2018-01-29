@@ -12,6 +12,9 @@ class Document(ABC):
     named, typed fields.
     """
 
+    def __getitem__(self, field_name: str) -> Any:
+        return self.get_field(field_name, None)
+
     @abstractmethod
     def get_document_id(self) -> int:
         """
@@ -55,6 +58,12 @@ class Corpus(collections.abc.Iterable):
     Abstract base class representing a corpus we can index and search over,
     i.e., a collection of documents.
     """
+
+    def __len__(self):
+        return self.size()
+
+    def __getitem__(self, document_id: int) -> Document:
+        return self.get_document(document_id)
 
     @abstractmethod
     def size(self) -> int:
@@ -177,7 +186,12 @@ def main():
     print(corpus.size())
     corpus = InMemoryCorpus("data/docs.json")
     print(*corpus, sep="\n")
+    assert len(corpus) == 13
     print(corpus.size())
+    document = corpus[0]
+    print(document)
+    body = document["body"]
+    print(body)
 
 
 if __name__ == "__main__":
